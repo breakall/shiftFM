@@ -27,9 +27,7 @@ Example:
 
 ### cron job
 
-`00 11 * * MON,TUE,WED,THU,FRI python3 /home/pi/radioshift/fmshift.py 96.1 3600 News >> /home/pi/fmshift.log 2>&1`
-
-` # records 96.1MHz for 1 hour every weekday starting at 11 AM
+`00 11 * * MON,TUE,WED,THU,FRI python3 /home/pi/radioshift/fmshift.py 96.1 3600 News >> /home/pi/fmshift.log 2>&1  #records 96.1MHz for 1 hour every weekday starting at 11 AM`
 
 
 ## Notes
