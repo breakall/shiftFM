@@ -9,11 +9,10 @@ Tested with:
 
 ## Pre-reqs
 
-* Osmocom RTL-SDR drivers
-* rtl_fm
-* ffmpeg
+* [(Osmocom RTL-SDR driver](https://osmocom.org/projects/rtl-sdr/wiki/Rtl-sdr)
+* ffmpeg (apt install ffmpeg)
 
 
 ## Usage
-* parameters: [frequency in MHz] [recording duration in seconds] [name of program]
-* example: python3 fmshift.py 96.1 News---> News_10-04-2020.mp3 
+* Parameters: [frequency in MHz] [recording duration in seconds] [name of program]
+* Example: python3 fmshift.py 96.1 3600 News # News_96.1_10-04-2020.mp3 
