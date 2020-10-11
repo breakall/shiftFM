@@ -11,6 +11,7 @@ Tested with:
 
 * [(Osmocom RTL-SDR driver](https://osmocom.org/projects/rtl-sdr/wiki/Rtl-sdr)
 * ffmpeg (apt install ffmpeg)
+* lighttpd (apt install lighttpd)
 
 
 ## Usage
@@ -28,6 +29,10 @@ Example:
 ### cron job
 
 `00 11 * * MON,TUE,WED,THU,FRI python3 /home/pi/radioshift/fmshift.py 96.1 3600 News >> /home/pi/fmshift.log 2>&1  #records 96.1MHz for 1 hour every weekday starting at 11 AM`
+
+
+* run generatefeed.py every ten minutes
+* copy mp3 files and rss file every ten minutes
 
 
 ## Notes
