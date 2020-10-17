@@ -9,7 +9,7 @@ Tested with:
 
 ## Pre-reqs
 * Python 3
-* [(Osmocom RTL-SDR driver](https://osmocom.org/projects/rtl-sdr/wiki/Rtl-sdr)
+* [Osmocom RTL-SDR driver](https://osmocom.org/projects/rtl-sdr/wiki/Rtl-sdr)
 * ffmpeg (apt install ffmpeg)
 * lighttpd (apt install lighttpd)
 
@@ -27,6 +27,9 @@ Example:
 
 
 ### cron jobs
+
+Add these to root's cron (sudo crontab -e):
+
 `# Freakonomics Radio - Saturday, 10a - 11a (3,600 seconds)`
 
 `00 10 * * SAT python3 /home/pi/shiftFM/shiftFM.py 88.9 3600 Freakonomics-Radio >> /home/pi/shiftFM/shiftFM.log 2>&1`
@@ -45,9 +48,17 @@ Example:
 
 
 
+## RSS feed
+
+The cron jobs above generate the rss.xml file and copy it to the base lighttpd folder.
+
+Get the IP address of your raspberry pi and add the feed URL manually to your podcast player: http://xx.xx.xx.xx/rss.xml
+
+Example: if your raspberry pi's IP is 192.168.1.10 --> http://192.168.1.10/rss.xml
+
 
 ## Notes
-* I had to experiment with the rtl_fm sample rate.... based on examples from other 
+
 
 
 ## Todo
