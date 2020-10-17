@@ -8,7 +8,7 @@ Tested with:
 
 
 ## Pre-reqs
-
+* Python 3
 * [(Osmocom RTL-SDR driver](https://osmocom.org/projects/rtl-sdr/wiki/Rtl-sdr)
 * ffmpeg (apt install ffmpeg)
 * lighttpd (apt install lighttpd)
@@ -26,13 +26,20 @@ Example:
 
 
 
-### cron job
+### cron jobs
+# Freakonomics Radio - Saturday, 10a - 11a (3,600 seconds)
+00 10 * * SAT python3 /home/pi/shiftFM/shiftFM.py 88.9 3600 Freakonomics-Radio >> /home/pi/shiftFM/shiftFM.log 2>&1
 
-`00 11 * * MON,TUE,WED,THU,FRI python3 /home/pi/radioshift/fmshift.py 96.1 3600 News >> /home/pi/fmshift.log 2>&1  #records 96.1MHz for 1 hour every weekday starting at 11 AM`
+# generate RSS file every ten minutes
+0-59/10 * * * * python3 /home/pi/shiftFM/generatefeed.py /home/pi/shiftFM/ 
+
+# copy mp3s to lighttpd folder
+2-59/10 * * * * cp /home/pi/shiftFM/*.mp3 /var/www/html/ 
+
+# copy RSS file to lighttpd folder
+3-59/10 * * * * cp /home/pi/shiftFM/rss.xml /var/www/html/
 
 
-* run generatefeed.py every ten minutes
-* copy mp3 files and rss file every ten minutes
 
 
 ## Notes
