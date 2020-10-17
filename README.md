@@ -27,7 +27,7 @@ Example:
 
 
 ### cron jobs
-'# Freakonomics Radio - Saturday, 10a - 11a (3,600 seconds)'
+`# Freakonomics Radio - Saturday, 10a - 11a (3,600 seconds)`
 
 '00 10 * * SAT python3 /home/pi/shiftFM/shiftFM.py 88.9 3600 Freakonomics-Radio >> /home/pi/shiftFM/shiftFM.log 2>&1'
 
