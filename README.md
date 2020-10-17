@@ -27,17 +27,17 @@ Example:
 
 
 ### cron jobs
-'# Freakonomics Radio - Saturday, 10a - 11a (3,600 seconds)
-00 10 * * SAT python3 /home/pi/shiftFM/shiftFM.py 88.9 3600 Freakonomics-Radio >> /home/pi/shiftFM/shiftFM.log 2>&1
+'# Freakonomics Radio - Saturday, 10a - 11a (3,600 seconds)`
+`00 10 * * SAT python3 /home/pi/shiftFM/shiftFM.py 88.9 3600 Freakonomics-Radio >> /home/pi/shiftFM/shiftFM.log 2>&1`
 
-# generate RSS file every ten minutes
-0-59/10 * * * * python3 /home/pi/shiftFM/generatefeed.py /home/pi/shiftFM/ 
+`# generate RSS file every ten minutes`
+`0-59/10 * * * * python3 /home/pi/shiftFM/generatefeed.py /home/pi/shiftFM/ `
 
-# copy mp3s to lighttpd folder
-2-59/10 * * * * cp /home/pi/shiftFM/*.mp3 /var/www/html/ 
+`# copy mp3s to lighttpd folder`
+`2-59/10 * * * * cp /home/pi/shiftFM/*.mp3 /var/www/html/ `
 
-# copy RSS file to lighttpd folder
-3-59/10 * * * * cp /home/pi/shiftFM/rss.xml /var/www/html/`
+`# copy RSS file to lighttpd folder`
+`3-59/10 * * * * cp /home/pi/shiftFM/rss.xml /var/www/html/`
 
 
 
