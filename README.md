@@ -1,5 +1,14 @@
 # shiftFM
 
+Time-shift FM radio
+
+
+## Description
+
+This program digitally records FM radio, then generates an RSS feed so the recordings can be played by a podcast player app.
+
+
+
 ## Hardware
 
 Tested with:
