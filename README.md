@@ -21,6 +21,8 @@ Tested with:
 * [Osmocom RTL-SDR driver](https://osmocom.org/projects/rtl-sdr/wiki/Rtl-sdr)
 * ffmpeg (apt install ffmpeg)
 * lighttpd (apt install lighttpd)
+* libxslt-dev
+* feedgen (python package for generating feeds)
 
 
 ## Usage
