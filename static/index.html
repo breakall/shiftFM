@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>shiftFM</title>
+    <link rel="stylesheet" href="/static/app.css" />
+  </head>
+  <body>
+    <div class="backdrop"></div>
+    <main class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Attic studio control</p>
+          <h1>shiftFM</h1>
+          <p class="tagline">Schedule broadcasts. Stream as a podcast.</p>
+        </div>
+        <div class="hero-actions">
+          <button class="ghost" id="copy-rss">Copy RSS feed URL</button>
+          <button class="primary" id="open-form">Add schedule</button>
+        </div>
+      </header>
+
+      <section class="cards" id="schedule-list"></section>
+
+      <section class="panel" id="schedule-panel" aria-hidden="true">
+        <div class="panel-header">
+          <div>
+            <h2 id="panel-title">New schedule</h2>
+            <p class="panel-subtitle">Large controls, no tiny taps.</p>
+          </div>
+          <button class="ghost" id="close-form">Close</button>
+        </div>
+
+        <form id="schedule-form">
+          <label>
+            Show name
+            <input type="text" name="name" placeholder="Freakonomics Radio" required />
+          </label>
+          <label>
+            Frequency (MHz)
+            <input type="number" name="frequency_mhz" min="50" max="108" step="0.1" required />
+          </label>
+          <label>
+            Duration (minutes)
+            <input type="number" name="duration_min" min="1" max="360" step="1" required />
+          </label>
+          <label>
+            Start time
+            <input type="time" name="start_time" required />
+          </label>
+
+          <div class="day-picker" id="day-picker">
+            <span>Days</span>
+            <div class="day-grid">
+              <button type="button" data-day="Mon">Mon</button>
+              <button type="button" data-day="Tue">Tue</button>
+              <button type="button" data-day="Wed">Wed</button>
+              <button type="button" data-day="Thu">Thu</button>
+              <button type="button" data-day="Fri">Fri</button>
+              <button type="button" data-day="Sat">Sat</button>
+              <button type="button" data-day="Sun">Sun</button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="primary">Save schedule</button>
+            <button type="button" class="ghost" id="cancel-form">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel mini" id="quick-record">
+        <h2>Quick record</h2>
+        <p>Tap to capture a one-off broadcast without saving a schedule.</p>
+        <form id="record-form">
+          <input type="text" name="name" placeholder="One-off name" required />
+          <input type="number" name="frequency_mhz" min="50" max="108" step="0.1" placeholder="Frequency" required />
+          <input type="number" name="duration_min" min="1" max="180" step="1" placeholder="Minutes" required />
+          <button type="submit" class="primary">Record now</button>
+        </form>
+      </section>
+
+      <section class="panel mini" id="recordings-panel">
+        <h2>Available recordings</h2>
+        <p>See what is already in the podcast feed.</p>
+        <button class="ghost" id="toggle-recordings">Show recordings</button>
+        <div class="recordings-table" id="recordings-list" aria-hidden="true"></div>
+      </section>
+
+      <section class="panel sheet" id="settings-panel" aria-hidden="true">
+        <div class="panel-header">
+          <div>
+            <h2>Settings</h2>
+            <p class="panel-subtitle">Podcast feed and device access.</p>
+          </div>
+          <button class="ghost" id="close-settings">Done</button>
+        </div>
+        <div class="settings-block">
+          <h3>Podcast feed</h3>
+          <p>Make sure your RSS URL matches how you access the Pi.</p>
+          <form id="config-form">
+            <input type="url" name="base_url" placeholder="http://192.168.1.10:8000" required />
+            <button type="submit" class="ghost">Update feed URL</button>
+          </form>
+          <p class="hint">RSS: <span id="rss-link">http://localhost:8000/rss.xml</span></p>
+        </div>
+      </section>
+      <button class="settings-link" id="open-settings">Settings</button>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+{
+  "base_url": "http://localhost:8088",
+  "rss_description": "Time-shifted FM recordings",
+  "rss_title": "shiftFM"
+}

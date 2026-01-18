@@ -1,0 +1,15 @@
+[Unit]
+Description=shiftFM scheduler and web UI
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/shiftFM-web
+ExecStart=/usr/bin/python3 /home/pi/shiftFM-web/server.py
+Restart=on-failure
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

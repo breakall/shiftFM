@@ -1,0 +1,6 @@
+__pycache__/
+recordings/
+server.log
+schedules.json
+config.json
+rss.xml

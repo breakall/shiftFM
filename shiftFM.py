@@ -1,54 +1,72 @@
-# shiftFM.py
-# parameters: [frequency in MHz] [recording duration in seconds] [name of program]
-# example: python3 fmshift.py 96.1 News---> News_10-04-2020.mp3 
-# recording will be terminated after the specified duration
-# modified from https://www.linux-magazine.com/Issues/2018/206/Pi-FM-Radio
+import argparse
+import re
+import subprocess
+from datetime import datetime
+from pathlib import Path
 
 
+def sanitize_name(value: str) -> str:
+    cleaned = re.sub(r"[^A-Za-z0-9_-]+", "-", value.strip())
+    return cleaned.strip("-") or "recording"
 
 
-import subprocess, signal, os, time, sys
-from datetime import date
+def record_station(frequency_mhz: float, duration_sec: int, name: str, output_dir: Path) -> Path:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now().strftime("%Y-%m-%d_%H%M")
+    safe_name = sanitize_name(name)
+    freq = f"{frequency_mhz:.1f}"
+    output_path = output_dir / f"{safe_name}_{freq}_{stamp}.mp3"
 
-today = date.today()
+    rtl_cmd = [
+        "rtl_fm",
+        "-f",
+        f"{frequency_mhz}e6",
+        "-M",
+        "wbfm",
+        "-s",
+        "200k",
+    ]
+    ffmpeg_cmd = [
+        "ffmpeg",
+        "-loglevel",
+        "error",
+        "-f",
+        "s16le",
+        "-ar",
+        "16000",
+        "-ac",
+        "2",
+        "-i",
+        "-",
+        "-t",
+        str(duration_sec),
+        str(output_path),
+    ]
 
-destination_path = "/home/pi/radioshift/"
-
-def newstation(station):
-    global process, stnum
-
-
-
-
-
-    # create a rtl_fm command line string and insert the new freq
-    part1 = "rtl_fm -f "
-    part2 = "e6 -M wbfm -s 200k - | ffmpeg -loglevel panic -f s16le -ar 16000 -ac 2 -i - "
-    filename = str(sys.argv[3]) + "_" + str(station) + "_" + str(today) + ".mp3"
-    cmd = part1 + str(station) + part2 + destination_path + filename
-    
-
-    # delete file if already exists
-
-    if os.path.exists(destination_path + filename):
-      os.remove(destination_path + filename)    
+    rtl = subprocess.Popen(rtl_cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    ffmpeg = subprocess.Popen(ffmpeg_cmd, stdin=rtl.stdout, stderr=subprocess.DEVNULL)
+    if rtl.stdout:
+        rtl.stdout.close()
+    ffmpeg.wait()
+    rtl.terminate()
+    try:
+        rtl.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        rtl.kill()
+    return output_path
 
 
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Record and time-shift FM radio.")
+    parser.add_argument("frequency_mhz", type=float, help="Frequency in MHz")
+    parser.add_argument("duration_sec", type=int, help="Recording duration in seconds")
+    parser.add_argument("name", help="Program name")
+    args = parser.parse_args()
 
-    # start the new fm connection
-    print (cmd)
-    process = subprocess.Popen(cmd, stderr=subprocess.STDOUT, shell=True)
+    output_dir = Path(__file__).resolve().parent / "recordings"
+    output_path = record_station(args.frequency_mhz, args.duration_sec, args.name, output_dir)
+    print(f"Saved recording to {output_path}")
 
 
-# kill fm connection
-def kill_process(process):
-    if process != 0:
-        process = int(subprocess.check_output(["pidof","rtl_fm"] ))
-        print ("Process pid = ", process)
-        if process != 0:
-            os.kill(process,signal.SIGINT)
-
-process = 0
-newstation(sys.argv[1])
-time.sleep(int(sys.argv[2]))
-kill_process(process)
+if __name__ == "__main__":
+    main()
