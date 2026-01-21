@@ -22,6 +22,7 @@ DEFAULT_CONFIG = {
     "base_url": "http://localhost:8088",
     "rss_title": "shiftFM",
     "rss_description": "Time-shifted FM recordings",
+    "rss_itunes_category": "News",
 }
 
 SAMPLE_SCHEDULES = {
@@ -132,6 +133,9 @@ def generate_rss(config: dict) -> None:
     base_url = config.get("base_url", DEFAULT_CONFIG["base_url"]).rstrip("/")
     title = escape(config.get("rss_title", DEFAULT_CONFIG["rss_title"]))
     description = escape(config.get("rss_description", DEFAULT_CONFIG["rss_description"]))
+    itunes_category = escape(
+        config.get("rss_itunes_category", DEFAULT_CONFIG["rss_itunes_category"])
+    )
 
     items = []
     for path in sorted(RECORDINGS_DIR.glob("*.mp3"), key=lambda p: p.stat().st_mtime, reverse=True):
@@ -165,6 +169,7 @@ def generate_rss(config: dict) -> None:
             f"    <title>{title}</title>",
             f"    <link>{escape(base_url)}/rss.xml</link>",
             f"    <description>{description}</description>",
+            f"    <itunes:category text=\"{itunes_category}\" />",
             "\n".join(items),
             "  </channel>",
             "</rss>",
@@ -350,6 +355,29 @@ class ShiftHandler(BaseHTTPRequestHandler):
         if self.headers.get("Content-Type", "").startswith("application/json"):
             return json.loads(payload)
         return parse_qs(payload)
+
+    def do_HEAD(self) -> None:
+        parsed = urlparse(self.path)
+        if parsed.path == "/rss.xml":
+            payload = RSS_PATH.read_text(encoding="utf-8") if RSS_PATH.exists() else ""
+            data = payload.encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/rss+xml")
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            return
+        if parsed.path.startswith("/recordings/"):
+            target = RECORDINGS_DIR / Path(parsed.path).name
+            if target.exists():
+                size = target.stat().st_size
+                self.send_response(200)
+                self.send_header("Content-Type", "audio/mpeg")
+                self.send_header("Content-Length", str(size))
+                self.end_headers()
+            else:
+                self.send_error(404)
+            return
+        self.send_error(404)
 
     def do_GET(self) -> None:
         parsed = urlparse(self.path)
